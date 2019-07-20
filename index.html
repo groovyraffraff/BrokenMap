@@ -1,0 +1,918 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content=" ">
+    <meta property="og:description" content=" ">
+    <meta property="og:image" content=" ">
+    <meta property="og:url" content=" ">
+    <link rel="shortcut icon" type="image/png" href="" />
+    <title>GO/NO-GO</title>
+
+
+
+    <!-- Linking Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Abel|Dosis|Faster+One|Julius+Sans+One|Lily+Script+One|Lobster|Meddon|Montez|Open+Sans|Open+Sans+Condensed:300|Damion|Pacifico|Satisfy&display=swap" rel="stylesheet">
+    <!-- Linking jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="assets/javascript/jquery.easing.1.3.js"></script>
+
+
+    <!-- Linking jQuery UI-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- Linking Font Awesome 5 for icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+    <!-- Linking CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+    <script>
+        $(document).ready(function() {
+            $('select').formSelect();
+            $('.modal').modal();
+            $('.dropdown-trigger').dropdown();
+        });
+    </script>
+
+    <!-- Link to Canvas Gauges library -->
+    <script src="//cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.5/all/gauge.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="title">
+            <h1>Go/No-Go</h1>
+        </div>
+
+        <div class="searchContainer">
+            <!-- Card starts -->
+            <div class="card row" id="cardbox" style="display:none;">
+                <!-- Autocomplete Point A Dropdown-->
+                <div class="col s12 m6">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">flight_takeoff</i>
+                        <input type="text" id="pointAinput" class="autocomplete">
+                        <label for="autocomplete-input">ICAO Code, City, or Airport Name</label>
+                    </div>
+                </div>
+
+                <!-- End of Autocomplete Point A Dropdown-->
+
+
+                <!-- Autocomplete Point B Dropdown-->
+
+                <div class="col s12 m6">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">flight_land</i>
+                        <input type="text" id="pointBinput" class="autocomplete">
+                        <label for="autocomplete-input">ICAO Code, City, or Airport Name</label>
+                    </div>
+                </div>
+
+                <!-- End of Point B Dropdown-->
+
+                <!-- End of Autocomplete Point B Dropdown-->
+            </div>
+
+
+
+            <!--Submit button -->
+            <div class="submit">
+
+                <button type="button" class="btn btn-raised submit" id="submitbtn">Let's go</button>
+            </div>
+
+            <!--End of Submit button -->
+            <br>
+            <br>
+
+        </div>
+        <!-- End of  Card -->
+
+
+        <!-- Result div -->
+        <div id="popup" style="display: none;">
+            <div class="shareIcon">
+
+                <!-- AddToAny BEGIN -->
+                <div class="a2a_kit a2a_kit_size_64 a2a_default_style">
+                    <a class="a2a_dd" href="https://www.addtoany.com/share"> <img class="sharebtn" src="assets/images/sharegray4.png" style="width:35px;height:35px;"></a>
+
+                    <a href="#!" class="closeBtn"><img src="assets/images/closegray1.png" style="width:35px;height:35px;"></a>
+                </div>
+                <script>
+                    var a2a_config = a2a_config || {};
+                    a2a_config.prioritize = ["sms", "email", "google_gmail", "whatsapp", "facebook_messenger",
+                        "facebook", "facebook", "twitter", "print"
+                    ];
+                    a2a_config.onclick = 1;
+                </script>
+                <script async src="https://static.addtoany.com/menu/page.js"></script>
+                <!-- AddToAny END -->
+
+            </div>
+
+
+            <div id="weather" class="">
+                <!-- pointA result div -->
+                <div class="left" id="pointAresult">
+
+                    <div class="airportAndTempAndIconContainer">
+
+                        <div class="airportContainer">
+                            <div class="flightCat"></div>
+                            <div class="airportCode"></div>
+                        </div>
+
+
+                        <div class="tempContainer">
+                            <div class="tempF"></div>
+                            <div class="tempC"></div>
+                        </div>
+
+                        <div class="weatherIconContainer">
+                            <div class="weatherIcon"></div>
+                            <div class="weatherDesc"></div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="staticWindContainer">
+                        <div class="staticWindDirContainer">
+                            <div class="staticWindDirImg">
+                                <span>Wind Direction</span><br>
+                                <div class="compass">
+                                    <canvas id="compassA"></canvas>
+                                </div>
+                            </div>
+                            <div class="staticWindDir"></div>
+                        </div>
+                        <div class="staticWindSpeedContainer">
+
+                            <div class="staticWindSpeedImg">
+                                <span>Wind Speed</span><br>
+
+                                <div class="compass">
+                                    <canvas id="windA"></canvas>
+                                </div>
+                            </div>
+                            <div class="staticWindSpeed"></div>
+                        </div>
+                    </div>
+
+                    <div class="airportFullNameContainer" style="display:flex">
+                        <i class="material-icons">place</i>
+                        <div class="airportFullName"></div>
+                    </div>
+
+                    <div class="timeContainer" style="display:flex"><i class="material-icons">
+                            access_time
+                            </i>
+
+
+                        <div class="timeStamp"></div>
+                    </div>
+
+
+                    <div class="visivilityContainer" style="display:flex"><i class="material-icons">
+                            visibility
+                            </i>
+                        <div class="visibility"></div>
+                    </div>
+
+                    <div class="cloudLayerContainer" style="display:flex"><i class="material-icons">
+                            cloud_queue
+                            </i>
+                        <span>Cloud layer: </span>
+                        <span class="cloudLayer"></span>
+                    </div>
+
+                    
+
+
+                </div>
+                <!-- End of pointA result div -->
+
+                <!-- pointB result div -->
+                <div class="right" id="pointBresult">
+
+                    <div class="airportAndTempAndIconContainer">
+
+                        <div class="airportContainer">
+                            <div class="flightCat"></div>
+                            <div class="airportCode"></div>
+                        </div>
+
+
+                        <div class="tempContainer">
+                            <div class="tempF"></div>
+                            <div class="tempC"></div>
+                        </div>
+
+                        <div class="weatherIconContainer">
+                            <div class="weatherIcon"></div>
+                            <div class="weatherDesc"></div>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="staticWindContainer">
+                        <div class="staticWindDirContainer">
+                            <div class="staticWindDirImg">
+                                <span>Wind Direction</span><br>
+                                <div class="compass">
+                                    <canvas id="compassB"></canvas>
+                                </div>
+                            </div>
+                            <div class="staticWindDir"></div>
+                        </div>
+                        <div class="staticWindSpeedContainer">
+
+                            <div class="staticWindSpeedImg">
+                                <span>Wind Speed</span><br>
+
+                                <div class="compass">
+                                    <canvas id="windB"></canvas>
+                                </div>
+                            </div>
+                            <div class="staticWindSpeed"></div>
+                        </div>
+                    </div>
+
+                    <div class="airportFullNameContainer" style="display:flex">
+                        <i class="material-icons">place</i>
+                        <div class="airportFullName"></div>
+                    </div>
+
+                    <div class="timeContainer" style="display:flex"><i class="material-icons">
+                                access_time
+                                </i>
+
+
+                        <div class="timeStamp"></div>
+                    </div>
+
+
+                    <div class="visivilityContainer" style="display:flex"><i class="material-icons">
+                                visibility
+                                </i>
+                        <div class="visibility"></div>
+                    </div>
+
+                    <div class="cloudLayerContainer" style="display:flex"><i class="material-icons">
+                                cloud_queue
+                                </i>
+                        <span>Cloud layer: </span>
+                        <span class="cloudLayer"></span>
+                    </div>
+
+                    
+
+
+                </div>
+                <!-- End of pointB result div -->
+            </div>
+
+
+        </div>
+
+        <div class="gMaps">
+            Map
+            <style>
+                #gmap {
+                  height: 600px;
+                  width: 100%;  
+                 }
+              </style>
+            </head>
+            <body>
+              <div id="gmap"></div>
+           <script>
+          
+          
+            var map
+          
+          function initMap() {
+            
+            var brady = {lat: 31.401579 , lng: -99.335310};
+           
+            var map = new google.maps.Map(
+                document.getElementById('gmap'), {
+                  zoom: 6, 
+                  center: brady,
+                  styles: [
+            {
+              "elementType": "geometry",
+              "stylers": [
+                { "color": "#212121"
+                }
+              ]
+            },
+            {
+              "elementType": "labels.icon",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#757575"
+                }
+              ]
+            },
+            {
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                {
+                  "color": "#212121"
+                }
+              ]
+            },
+            {
+              "featureType": "administrative",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#757575"
+                }
+              ]
+            },
+            {
+              "featureType": "administrative.country",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#9e9e9e"
+                }
+              ]
+            },
+            {
+              "featureType": "administrative.land_parcel",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "administrative.locality",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#bdbdbd"
+                }
+              ]
+            },
+            {
+              "featureType": "administrative.neighborhood",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "poi",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#757575"
+                }
+              ]
+            },
+            {
+              "featureType": "poi.business",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "poi.park",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#181818"
+                }
+              ]
+            },
+            {
+              "featureType": "poi.park",
+              "elementType": "labels.text",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "poi.park",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#616161"
+                }
+              ]
+            },
+            {
+              "featureType": "poi.park",
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                {
+                  "color": "#1b1b1b"
+                }
+              ]
+            },
+            {
+              "featureType": "road",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "road",
+              "elementType": "geometry.fill",
+              "stylers": [
+                {
+                  "color": "#2c2c2c"
+                }
+              ]
+            },
+            {
+              "featureType": "road",
+              "elementType": "labels",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "road",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#8a8a8a"
+                }
+              ]
+            },
+            {
+              "featureType": "road.arterial",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#373737"
+                }
+              ]
+            },
+            {
+              "featureType": "road.highway",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#3c3c3c"
+                }
+              ]
+            },
+            {
+              "featureType": "road.highway.controlled_access",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#4e4e4e"
+                }
+              ]
+            },
+            {
+              "featureType": "road.local",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#616161"
+                }
+              ]
+            },
+            {
+              "featureType": "transit",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#757575"
+                }
+              ]
+            },
+            {
+              "featureType": "transit.line",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "transit.station",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "transit.station.airport",
+              "stylers": [
+                {
+                  "color": "#ffffff"
+                },
+                {
+                  "saturation": 5
+                },
+                {
+                  "lightness": -5
+                },
+                {
+                  "weight": 8
+                }
+              ]
+            },
+            {
+              "featureType": "transit.station.airport",
+              "elementType": "geometry.fill",
+              "stylers": [
+                {
+                  "color": "#ffffff"
+                },
+                {
+                  "visibility": "on"
+                },
+                {
+                  "weight": 8
+                }
+              ]
+            },
+            {
+              "featureType": "transit.station.airport",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                {
+                  "color": "#ffffff"
+                },
+                {
+                  "saturation": 5
+                },
+                {
+                  "visibility": "on"
+                },
+                {
+                  "weight": 8
+                }
+              ]
+            },
+            {
+              "featureType": "transit.station.bus",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "transit.station.rail",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "water",
+              "stylers": [
+                {
+                  "color": "#91bde4"
+                }
+              ]
+            },
+            {
+              "featureType": "water",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "featureType": "water",
+              "elementType": "geometry.fill",
+              "stylers": [
+                {
+                  "color": "#91bde4"
+                }
+              ]
+            },
+            {
+              "featureType": "water",
+              "elementType": "labels.text",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "water",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#3d3d3d"
+                }
+              ]
+            }
+          ]
+                });
+            // The markers, probably will need a for loop for this, for now it is just a marker on austin, tx
+          
+            var marker = new google.maps.Marker({
+              position:brady, 
+              map: map
+            });
+          
+          // clustering for markers would also be cool if we can do it! //
+          
+          // Hide markers not in use //
+          
+          
+          
+            // Create Shape layers //
+            var worldshape = [
+            {lat: -85.1054596961173, lng: -180},
+            {lat: -85.1054596961173, lng: 180},
+            {lat: 85.1054596961173, lng: 180},
+            {lat: -85.1054596961173, lng: 0},
+          
+                  ];
+            var texasshape = [
+            {lat: 31.8659, lng: -106.5715},
+            {lat: 31.7504, lng: -106.5042},
+            {lat: 31.6242, lng: -106.3092},
+            {lat: 31.4638, lng: -106.2103},
+            {lat: 31.3912, lng: -106.0181},
+            {lat: 31.1846, lng: -105.7874},
+            {lat: 31.0012, lng: -105.5663},
+            {lat: 30.8456, lng: -105.4015},
+            {lat: 30.6462, lng: -105.0032},
+            {lat: 30.3847, lng: -104.8521},
+            {lat: 30.2591, lng: -104.7437},
+            {lat: 30.0738, lng: -104.6915},
+            {lat: 29.9169, lng: -104.6777},
+            {lat: 29.7644, lng: -104.5679},
+            {lat: 29.6475, lng: -104.528},
+            {lat: 29.5603, lng: -104.4044},
+            {lat: 29.4719, lng: -104.2067},
+            {lat: 29.3834, lng: -104.1559},
+            {lat: 29.2948, lng: -103.9774},
+            {lat: 29.2804, lng: -103.9128},
+            {lat: 29.2481, lng: -103.8208},
+            {lat: 29.1378, lng: -103.564},
+            {lat: 29.0682, lng: -103.4692},
+            {lat: 29.0105, lng: -103.3154},
+            {lat: 28.9601, lng: -103.1616},
+            {lat: 29.0177, lng: -103.0957},
+            {lat: 29.133, lng: -103.0298},
+            {lat: 29.2157, lng: -102.8677},
+            {lat: 29.2565, lng: -102.8979},
+            {lat: 29.357, lng: -102.8375},
+            {lat: 29.4898, lng: -102.8004},
+            {lat: 29.6881, lng: -102.7002},
+            {lat: 29.7691, lng: -102.5134},
+            {lat: 29.7596, lng: -102.3843},
+            {lat: 29.8788, lng: -102.3047},
+            {lat: 29.7834, lng: -102.1509},
+            {lat: 29.7572, lng: -101.7004},
+            {lat: 29.7644, lng: -101.4917},
+            {lat: 29.6308, lng: -101.2939},
+            {lat: 29.5269, lng: -101.2582},
+            {lat: 29.3642, lng: -101.0056},
+            {lat: 29.3056, lng: -100.9204},
+            {lat: 29.1642, lng: -100.7707},
+            {lat: 29.0946, lng: -100.7007},
+            {lat: 28.9012, lng: -100.6306},
+            {lat: 28.6593, lng: -100.4974},
+            {lat: 28.4675, lng: -100.3601},
+            {lat: 28.2778, lng: -100.2969},
+            {lat: 28.1882, lng: -100.1733},
+            {lat: 28.0526, lng: -100.0195},
+            {lat: 27.9435, lng: -99.9344},
+            {lat: 27.7638, lng: -99.8438},
+            {lat: 27.6641, lng: -99.7119},
+            {lat: 27.4839, lng: -99.4812},
+            {lat: 27.3059, lng: -99.5375},
+            {lat: 27.1948, lng: -99.429},
+            {lat: 27.0175, lng: -99.4455},
+            {lat: 26.8829, lng: -99.3164},
+            {lat: 26.6867, lng: -99.2065},
+            {lat: 26.4116, lng: -99.0967},
+            {lat: 26.3574, lng: -98.8138},
+            {lat: 26.2257, lng: -98.6668},
+            {lat: 26.2343, lng: -98.5474},
+            {lat: 26.1357, lng: -98.3276},
+            {lat: 26.0457, lng: -98.1697},
+            {lat: 26.0518, lng: -97.9143},
+            {lat: 26.005, lng: -97.6643},
+            {lat: 25.8419, lng: -97.402},
+            {lat: 25.9074, lng: -97.3526},
+            {lat: 25.9679, lng: -97.0148},
+            {lat: 26.1789, lng: -97.0697},
+            {lat: 26.8253, lng: -97.2249},
+            {lat: 27.423, lng: -97.0752},
+            {lat: 28.0599, lng: -96.6096},
+            {lat: 28.4228, lng: -95.9285},
+            {lat: 28.7568, lng: -95.3036},
+            {lat: 29.0742, lng: -94.7296},
+            {lat: 29.381, lng: -94.3355},
+            {lat: 29.6021, lng: -93.8205},
+            {lat: 29.8013, lng: -93.9317},
+            {lat: 29.9157, lng: -93.8136},
+            {lat: 30.0489, lng: -93.723},
+            {lat: 30.1214, lng: -93.6996},
+            {lat: 30.2021, lng: -93.7216},
+            {lat: 30.2792, lng: -93.7038},
+            {lat: 30.3278, lng: -93.7628},
+            {lat: 30.3835, lng: -93.7587},
+            {lat: 30.438, lng: -93.701},
+            {lat: 30.5079, lng: -93.7024},
+            {lat: 30.5362, lng: -93.7299},
+            {lat: 30.6296, lng: -93.6694},
+            {lat: 30.7466, lng: -93.609},
+            {lat: 30.8114, lng: -93.5527},
+            {lat: 30.8834, lng: -93.5747},
+            {lat: 30.9376, lng: -93.5307},
+            {lat: 31.0318, lng: -93.5074},
+            {lat: 31.0812, lng: -93.5266},
+            {lat: 31.1787, lng: -93.5335},
+            {lat: 31.167, lng: -93.598},
+            {lat: 31.3055, lng: -93.6832},
+            {lat: 31.383, lng: -93.6708},
+            {lat: 31.4369, lng: -93.6887},
+            {lat: 31.5107, lng: -93.7202},
+            {lat: 31.582, lng: -93.8315},
+            {lat: 31.644, lng: -93.8123},
+            {lat: 31.7188, lng: -93.8232},
+            {lat: 31.7936, lng: -93.8342},
+            {lat: 31.8309, lng: -93.8782},
+            {lat: 31.8869, lng: -93.9221},
+            {lat: 31.9335, lng: -93.9661},
+            {lat: 32.0081, lng: -94.043},
+            {lat: 33.4681, lng: -94.043},
+            {lat: 33.5414, lng: -94.043},
+            {lat: 33.5689, lng: -94.1528},
+            {lat: 33.5872, lng: -94.1968},
+            {lat: 33.5872, lng: -94.2627},
+            {lat: 33.5689, lng: -94.3176},
+            {lat: 33.5597, lng: -94.3945},
+            {lat: 33.578, lng: -94.4275},
+            {lat: 33.6055, lng: -94.4275},
+            {lat: 33.6421, lng: -94.4495},
+            {lat: 33.6329, lng: -94.4879},
+            {lat: 33.6421, lng: -94.5236},
+            {lat: 33.6695, lng: -94.6637},
+            {lat: 33.7061, lng: -94.7461},
+            {lat: 33.7791, lng: -94.8999},
+            {lat: 33.8818, lng: -95.0757},
+            {lat: 33.9251, lng: -95.1526},
+            {lat: 33.9604, lng: -95.2254},
+            {lat: 33.875, lng: -95.2858},
+            {lat: 33.8841, lng: -95.5399},
+            {lat: 33.8887, lng: -95.7568},
+            {lat: 33.8408, lng: -95.842},
+            {lat: 33.8556, lng: -96.0274},
+            {lat: 33.6901, lng: -96.3528},
+            {lat: 33.8442, lng: -96.6179},
+            {lat: 33.8898, lng: -96.5836},
+            {lat: 33.8955, lng: -96.6673},
+            {lat: 33.8179, lng: -96.7538},
+            {lat: 33.8613, lng: -96.8335},
+            {lat: 33.8613, lng: -96.8774},
+            {lat: 33.9388, lng: -96.9159},
+            {lat: 33.7392, lng: -97.0917},
+            {lat: 33.7449, lng: -97.1645},
+            {lat: 33.8978, lng: -97.218},
+            {lat: 33.8225, lng: -97.3746},
+            {lat: 33.8305, lng: -97.4611},
+            {lat: 33.8761, lng: -97.446},
+            {lat: 33.9798, lng: -97.6945},
+            {lat: 33.8476, lng: -97.8648},
+            {lat: 33.8978, lng: -97.9651},
+            {lat: 34.0299, lng: -98.0983},
+            {lat: 34.1141, lng: -98.1752},
+            {lat: 34.1425, lng: -98.3743},
+            {lat: 34.064, lng: -98.4773},
+            {lat: 34.1209, lng: -98.5529},
+            {lat: 34.1232, lng: -98.752},
+            {lat: 34.2095, lng: -98.9539},
+            {lat: 34.2073, lng: -99.0637},
+            {lat: 34.2141, lng: -99.1832},
+            {lat: 34.3593, lng: -99.2505},
+            {lat: 34.4613, lng: -99.3823},
+            {lat: 34.3774, lng: -99.4318},
+            {lat: 34.416, lng: -99.5718},
+            {lat: 34.3706, lng: -99.6158},
+            {lat: 34.4726, lng: -99.8094},
+            {lat: 34.5631, lng: -99.9934},
+            {lat: 36.4975, lng: -100.0017},
+            {lat: 36.5008, lng: -103.0408},
+            {lat: 32.0011, lng: -103.0655},
+            {lat: 32.0023, lng: -106.6168},
+          
+                  ];
+               
+                  // Construct the polygon. 
+                  // and the hole
+             var polytexas = new google.maps.Polygon({
+                    paths: [worldshape,texasshape],
+                    strokeColor: '#FFFFFF',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#FFFFFF',
+                    fillOpacity: 1,
+                  });
+                  polytexas.setMap(map);
+          
+            var polyworld = new google.maps.Polygon({
+                    paths: [worldshape,texasshape],
+                    strokeColor: '#FFFFFF',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#FFFFFF',
+                    fillOpacity: 2.0,
+                  });
+            polyworld.setMap(map);
+                
+            // Define the LatLng coordinates for the polygon's path.
+          
+            //add toms live weather//
+          
+          }
+              
+              </script>
+              
+              <script async defer
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSNbizBjn6jiaM9TM0s03Zd9yBT5rtKEg&callback=initMap">
+              </script>
+        </div>
+        <!--End of Result div -->
+    </div>
+
+    </div>
+
+
+    <!--Form validation Warning-->
+    <div id="validationError" class="modal">
+
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect"><img src="assets/images/close1.png" style="width:30px;height:30px;"></a>
+        </div>
+        <div class="modal-content">
+            <h5>Please select at least one airport.</h5>
+            <p>Click anywhere to dismiss.</p>
+        </div>
+    </div>
+    <!--End of Form validation Warning -->
+
+
+    <button onclick="topFunction()" id="topBtn" title="Go to top"><b>⌃</b></button>
+
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <!-- Linking JavaScript file -->
+    <script type="text/javascript " src="assets/javascript/app.js"></script>
+
+</body>
+
+</html>
